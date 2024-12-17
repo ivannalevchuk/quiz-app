@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import Question from "./Question";
 import QUESTIONS from "../questions";
-import completeImg from "../assets/quiz-complete.png";
+import Summary from "./Summary";
 
 function QuizArea() {
   const [userAnswer, setUserAnswer] = useState([]);
@@ -18,21 +18,13 @@ function QuizArea() {
     [handleAnswerClick]
   );
 
+  const handleTryAgain = () => {
+    setUserAnswer([]);
+  }
+
   if (isQuizEnd) {
     return (
-      <div id="summary">
-        <img src={completeImg} alt="Completed quiz!" />
-        <h2>Quiz is over!</h2>
-        <h2>
-          You answered{" "}
-          {
-            userAnswer.filter(
-              (answer, index) => answer === QUESTIONS[index].correct
-            ).length
-          }{" "}
-          out of {QUESTIONS.length} questions correctly!
-        </h2>
-      </div>
+      <Summary  userAnswers={userAnswer} onRestart = {handleTryAgain}/>
     );
   }
 

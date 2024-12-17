@@ -8,7 +8,14 @@ function Question({ index, onSelectedAnswer, onSkip }) {
     selectedAnswer: "",
     isCorrect: null,
   });
+  let timer = 15000;
 
+  if (answer.selectedAnswer) {
+    timer = 1000;
+  }
+  if (answer.isCorrect !== null) {
+    timer = 2000;
+  }
   function handleAnswer(answer) {
     setAnswer({
       selectedAnswer: answer,
@@ -25,8 +32,6 @@ function Question({ index, onSelectedAnswer, onSkip }) {
         onSelectedAnswer(answer);
       }, 2000);
     }, 1000);
-
-
   }
 
   let answerState = "";
@@ -34,22 +39,25 @@ function Question({ index, onSelectedAnswer, onSkip }) {
     answerState = answer.isCorrect ? "correct" : "wrong";
   } else if (answer.selectedAnswer) {
     answerState = "answered";
-
   }
 
-    return (
-      <div id="question">
-        <Timer time={15000} onTimeEnd={onSkip} />
-        <h2>{QUESTIONS[index].text}</h2>
-        <AnswerList
-          answers={QUESTIONS[index].answers}
-          onSelect={handleAnswer}
-          selectedAnswer={answer.selectedAnswer}
-          checkAnswer={answerState}
-        />
-      </div>
-    );
-  }
-
+  return (
+    <div id="question">
+      <Timer
+        time={timer}
+        onTimeEnd={answer.selectedAnswer === "" ? onSkip : null}
+        mode={answerState}
+        key={timer}
+      />
+      <h2>{QUESTIONS[index].text}</h2>
+      <AnswerList
+        answers={QUESTIONS[index].answers}
+        onSelect={handleAnswer}
+        selectedAnswer={answer.selectedAnswer}
+        checkAnswer={answerState}
+      />
+    </div>
+  );
+}
 
 export default Question;
